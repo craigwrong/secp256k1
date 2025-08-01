@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.1
 
 import PackageDescription
 
@@ -9,17 +9,16 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "LibSECP256k1PreComputed",
+            name: "precomp",
             path: "src",
             sources: ["precomputed_ecmult.c", "precomputed_ecmult_gen.c"],
-            publicHeadersPath: "include-precomputed",
             cSettings: [
                 .define("SECP256K1_BUILD", to: ""),
             ]
         ),
         .target(
             name: "LibSECP256k1",
-            dependencies: ["LibSECP256k1PreComputed"],
+            dependencies: ["precomp"],
             path: "src",
             sources: ["secp256k1.c"],
             publicHeadersPath: "include",
@@ -34,10 +33,25 @@ let package = Package(
             ]
         ),
         .executableTarget(
-            name: "LibSECP256k1Tests",
-            dependencies: ["LibSECP256k1PreComputed"],
+            name: "tests",
+            dependencies: ["precomp"],
             path: "src",
             sources: ["tests.c"],
+            cSettings: [
+                .define("SECP256K1_BUILD", to: ""),
+                .define("ENABLE_MODULE_ECDH"),
+                .define("ENABLE_MODULE_RECOVERY"),
+                .define("ENABLE_MODULE_EXTRAKEYS"),
+                .define("ENABLE_MODULE_SCHNORRSIG"),
+                .define("ENABLE_MODULE_ELLSWIFT"),
+                .define("ENABLE_MODULE_MUSIG")
+            ]
+        ),
+        .executableTarget(
+            name: "tests-exhaustive",
+            dependencies: ["precomp"],
+            path: "src",
+            sources: ["tests_exhaustive.c"],
             cSettings: [
                 .define("SECP256K1_BUILD", to: ""),
                 .define("ENABLE_MODULE_ECDH"),

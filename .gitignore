@@ -66,6 +66,11 @@ libsecp256k1.pc
 # Default CMake build directory.
 /build
 
+### Python
+__pycache__/
+*.py[oc]
+>>>>>>> v0.7.0
+
 ### Craig S. Wrong
 .DS_Store
 /.gitconfig/user
