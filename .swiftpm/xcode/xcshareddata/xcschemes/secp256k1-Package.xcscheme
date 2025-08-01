@@ -29,20 +29,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "LibSECP256k1Tests"
-               BuildableName = "LibSECP256k1Tests"
-               BlueprintName = "LibSECP256k1Tests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "tests"
                BuildableName = "tests"
                BlueprintName = "tests"
@@ -82,22 +68,12 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "tests-exhaustive"
-            BuildableName = "tests-exhaustive"
-            BlueprintName = "tests-exhaustive"
-            ReferencedContainer = "container:">
-         </BuildableReference>
-      </BuildableProductRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "LibSECP256k1Tests"
-            BuildableName = "LibSECP256k1Tests"
-            BlueprintName = "LibSECP256k1Tests"
+            BlueprintIdentifier = "tests"
+            BuildableName = "tests"
+            BlueprintName = "tests"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
@@ -108,8 +84,7 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "tests-exhaustive"
@@ -117,7 +92,7 @@
             BlueprintName = "tests-exhaustive"
             ReferencedContainer = "container:">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

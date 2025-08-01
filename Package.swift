@@ -9,16 +9,17 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "precomp",
+            name: "SECP256k1-precomp",
             path: "src",
             sources: ["precomputed_ecmult.c", "precomputed_ecmult_gen.c"],
+            publicHeadersPath: "include.precomp",
             cSettings: [
                 .define("SECP256K1_BUILD", to: ""),
             ]
         ),
         .target(
             name: "LibSECP256k1",
-            dependencies: ["precomp"],
+            dependencies: ["SECP256k1-precomp"],
             path: "src",
             sources: ["secp256k1.c"],
             publicHeadersPath: "include",
@@ -34,7 +35,7 @@ let package = Package(
         ),
         .executableTarget(
             name: "tests",
-            dependencies: ["precomp"],
+            dependencies: ["SECP256k1-precomp"],
             path: "src",
             sources: ["tests.c"],
             cSettings: [
@@ -49,7 +50,7 @@ let package = Package(
         ),
         .executableTarget(
             name: "tests-exhaustive",
-            dependencies: ["precomp"],
+            dependencies: ["SECP256k1-precomp"],
             path: "src",
             sources: ["tests_exhaustive.c"],
             cSettings: [
