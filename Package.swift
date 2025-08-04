@@ -9,19 +9,9 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SECP256k1-precomp",
-            path: "src",
-            sources: ["precomputed_ecmult.c", "precomputed_ecmult_gen.c"],
-            publicHeadersPath: "include.precomp",
-            cSettings: [
-                .define("SECP256K1_BUILD", to: ""),
-            ]
-        ),
-        .target(
             name: "LibSECP256k1",
-            dependencies: ["SECP256k1-precomp"],
             path: "src",
-            sources: ["secp256k1.c"],
+            sources: ["secp256k1.c", "ecmult_const_impl.h", "ecmult_impl.h", "precomputed_ecmult.h", "precomputed_ecmult_gen.h", "precomputed_ecmult.c", "precomputed_ecmult_gen.c"],
             publicHeadersPath: "include",
             cSettings: [
                 .define("SECP256K1_BUILD", to: ""),
@@ -34,23 +24,7 @@ let package = Package(
             ]
         ),
         .executableTarget(
-            name: "tests",
-            dependencies: ["SECP256k1-precomp"],
-            path: "src",
-            sources: ["tests.c"],
-            cSettings: [
-                .define("SECP256K1_BUILD", to: ""),
-                .define("ENABLE_MODULE_ECDH"),
-                .define("ENABLE_MODULE_RECOVERY"),
-                .define("ENABLE_MODULE_EXTRAKEYS"),
-                .define("ENABLE_MODULE_SCHNORRSIG"),
-                .define("ENABLE_MODULE_ELLSWIFT"),
-                .define("ENABLE_MODULE_MUSIG")
-            ]
-        ),
-        .executableTarget(
             name: "tests-exhaustive",
-            dependencies: ["SECP256k1-precomp"],
             path: "src",
             sources: ["tests_exhaustive.c"],
             cSettings: [

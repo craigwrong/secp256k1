@@ -29,20 +29,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "tests"
-               BuildableName = "tests"
-               BlueprintName = "tests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "tests-exhaustive"
                BuildableName = "tests-exhaustive"
                BlueprintName = "tests-exhaustive"
@@ -71,9 +57,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "tests"
-            BuildableName = "tests"
-            BlueprintName = "tests"
+            BlueprintIdentifier = "tests-exhaustive"
+            BuildableName = "tests-exhaustive"
+            BlueprintName = "tests-exhaustive"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
