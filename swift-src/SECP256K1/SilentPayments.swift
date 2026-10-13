@@ -144,7 +144,7 @@ extension Context {
 
         let ok = xonlyStructs.withUnsafeMutableBufferPointer { xb -> Int32 in
             plainStructs.withUnsafeMutableBufferPointer { pb -> Int32 in
-                let xptrs: [UnsafePointer<secp256k1_xonly_pubkey>?] =
+                let xptrs: [UnsafePointer<XOnlyPubkey>?] =
                     unsafe (0..<xb.count).map { unsafe UnsafePointer(xb.baseAddress! + $0) }
                 let pptrs: [UnsafePointer<Pubkey>?] =
                     unsafe (0..<pb.count).map { unsafe UnsafePointer(pb.baseAddress! + $0) }
@@ -201,14 +201,14 @@ extension Context {
         var keypairStructs = keyPairs.map(\.raw)
         // Flatten the secret keys into one buffer so the pointers stay valid.
         var flatSeckeys = secretKeys.flatMap { $0 }
-        var outputs = [secp256k1_xonly_pubkey](repeating: secp256k1_xonly_pubkey(),
+        var outputs = [XOnlyPubkey](repeating: XOnlyPubkey(),
                                                count: recipients.count)
 
         let ok = outputs.withUnsafeMutableBufferPointer { ob -> Int32 in
             recipientStructs.withUnsafeMutableBufferPointer { rb -> Int32 in
                 keypairStructs.withUnsafeMutableBufferPointer { kb -> Int32 in
                     flatSeckeys.withUnsafeMutableBufferPointer { sb -> Int32 in
-                        var outPtrs: [UnsafeMutablePointer<secp256k1_xonly_pubkey>?] =
+                        var outPtrs: [UnsafeMutablePointer<XOnlyPubkey>?] =
                             unsafe (0..<ob.count).map { unsafe ob.baseAddress! + $0 }
                         var recPtrs: [UnsafePointer<secp256k1_silentpayments_recipient>?] =
                             unsafe (0..<rb.count).map { unsafe UnsafePointer(rb.baseAddress! + $0) }
@@ -308,7 +308,7 @@ extension Context {
             outputStructs.withUnsafeMutableBufferPointer { ob -> Int32 in
                 var foundPtrs: [UnsafeMutablePointer<secp256k1_silentpayments_found_output>?] =
                     unsafe (0..<fb.count).map { unsafe fb.baseAddress! + $0 }
-                let outPtrs: [UnsafePointer<secp256k1_xonly_pubkey>?] =
+                let outPtrs: [UnsafePointer<XOnlyPubkey>?] =
                     unsafe (0..<ob.count).map { unsafe UnsafePointer(ob.baseAddress! + $0) }
                 return foundPtrs.withUnsafeMutableBufferPointer { fp in
                     outPtrs.withUnsafeBufferPointer { op in

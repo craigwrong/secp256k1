@@ -20,7 +20,10 @@ Tags:
 # manage the lifetime. Destruction stays explicit; Secp256k1Context owns it.
 - Name: secp256k1_context_struct
   SwiftName: "SECP256K1Context"
+  #SwiftCopyable: false
+  #SwiftDestroyOp: secp256k1_context_destroy
   SwiftImportAs: reference
+  SwiftConformsTo: Swift.Sendable
   SwiftRetainOp: immortal
   SwiftReleaseOp: immortal
 - Name: secp256k1_pubkey
@@ -28,8 +31,18 @@ Tags:
   Fields:
   - Name: data
     Nullability: N
+- Name: secp256k1_xonly_pubkey
+  SwiftName: "XOnlyPubkey"
+  Fields:
+  - Name: data
+    Nullability: N
 - Name: secp256k1_ecdsa_signature
   SwiftName: "ECDSASignature"
+  Fields:
+  - Name: data
+    Nullability: N
+- Name: secp256k1_ecdsa_recoverable_signature
+  SwiftName: "ECDSARecoverableSignature"
   Fields:
   - Name: data
     Nullability: N
@@ -293,8 +306,12 @@ Functions:
   - Position: 0          # ctx
     Nullability: N
   - Position: 1          # pubkey
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 2          # sig
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 3          # msghash32
     NoEscape: true
@@ -306,8 +323,12 @@ Functions:
   - Position: 0          # ctx
     Nullability: N
   - Position: 1          # sig
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 2          # sigin
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
 - Name: secp256k1_ecdsa_recoverable_signature_parse_compact
   SwiftName: "secp256k1_context.ecdsaRecoverableSignatureParseCompact(self:sig:input64:recid:)"
@@ -315,6 +336,8 @@ Functions:
   - Position: 0          # ctx
     Nullability: N
   - Position: 1          # sig
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 2          # input64
     NoEscape: true
@@ -330,8 +353,12 @@ Functions:
     BoundsSafety: { Kind: counted_by, BoundedBy: 64 }
     Nullability: N
   - Position: 2          # recid
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 3          # sig
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
 - Name: secp256k1_ecdsa_sign
   SwiftName: "secp256k1_context.ecdsaSign(self:_:messageHash:secretKey:nonceFunction:nonceData:)"
@@ -360,6 +387,8 @@ Functions:
   - Position: 0          # ctx
     Nullability: N
   - Position: 1          # sig
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 2          # msghash32
     NoEscape: true
@@ -881,6 +910,8 @@ Functions:
     BoundsSafety: { Kind: counted_by, BoundedBy: msglen }
     Nullability: O
   - Position: 4          # pubkey
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
 - Name: secp256k1_silentpayments_recipient_create_labeled_spend_pubkey
   SwiftName: "secp256k1_context.silentpaymentsRecipientCreateLabeledSpendPubkey(self:labeledSpendPubkey:unlabeledSpendPubkey:label:)"
@@ -1015,10 +1046,16 @@ Functions:
   - Position: 0          # ctx
     Nullability: N
   - Position: 1          # xonly_pubkey
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 2          # pk_parity
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: O
   - Position: 3          # pubkey
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
 - Name: secp256k1_xonly_pubkey_parse
   SwiftName: "secp256k1_context.xonlyPubkeyParse(self:pubkey:input32:)"
@@ -1026,6 +1063,8 @@ Functions:
   - Position: 0          # ctx
     Nullability: N
   - Position: 1          # pubkey
+    NoEscape: true
+    BoundsSafety: { Kind: counted_by, BoundedBy: 1 }
     Nullability: N
   - Position: 2          # input32
     NoEscape: true

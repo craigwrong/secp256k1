@@ -55,7 +55,7 @@ extension Context {
     /// reconstruct the original.
     public func xOnlyPublicKey(of publicKey: PublicKey) throws -> (key: XOnlyPublicKey, parity: Int32) {
         var key = publicKey.raw
-        var xonly = secp256k1_xonly_pubkey()
+        var xonly = XOnlyPubkey()
         var parity: Int32 = 0
         let ok = unsafe raw.xonlyPubkeyFromPubkey(xonlyPubkey: &xonly, pkParity: &parity,
                                                   pubkey: &key)

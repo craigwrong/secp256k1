@@ -6,9 +6,9 @@ import CSECP256K1
 /// Bitcoin uses this for message signing, where transmitting the public key
 /// would be redundant.
 public struct RecoverableSignature: Sendable {
-    @usableFromInline var raw: secp256k1_ecdsa_recoverable_signature
+    @usableFromInline var raw: ECDSARecoverableSignature
 
-    @usableFromInline init(raw: secp256k1_ecdsa_recoverable_signature) { self.raw = raw }
+    @usableFromInline init(raw: ECDSARecoverableSignature) { self.raw = raw }
 }
 
 extension Context {
@@ -23,12 +23,13 @@ extension Context {
         guard secretKey.count == 32 else {
             throw Secp256k1Error.wrongLength(expected: 32, actual: secretKey.count)
         }
-        var sig = secp256k1_ecdsa_recoverable_signature()
-        let ok = unsafe raw.ecdsaSignRecoverable(sig: &sig, msghash32: messageHash,
+        var sig = CollectionOfOne(ECDSARecoverableSignature())
+        var sigSpan = sig.mutableSpan
+        let ok = unsafe raw.ecdsaSignRecoverable(sig: &sigSpan, msghash32: messageHash,
                                                  seckey: secretKey,
                                                  noncefp: nil, ndata: nil)
         guard ok == 1 else { throw Secp256k1Error.signingFailed }
-        return RecoverableSignature(raw: sig)
+        return RecoverableSignature(raw: sig[0])
     }
 
     /// Recovers the signer's public key from a recoverable signature.
@@ -42,11 +43,12 @@ extension Context {
         guard messageHash.count == 32 else {
             throw Secp256k1Error.wrongLength(expected: 32, actual: messageHash.count)
         }
-        var sig = signature.raw
-        var pub = Pubkey()
-        let ok = unsafe raw.ecdsaRecover(pubkey: &pub, sig: &sig, msghash32: messageHash)
+        let sig = CollectionOfOne(signature.raw)
+        var pub = CollectionOfOne(Pubkey())
+        var pubSpan = pub.mutableSpan
+        let ok = raw.ecdsaRecover(pubkey: &pubSpan, sig: sig.span, msghash32: messageHash)
         guard ok == 1 else { throw Secp256k1Error.invalidSignature }
-        return PublicKey(raw: pub)
+        return PublicKey(raw: pub[0])
     }
 
     /// Serialises to 64 compact bytes plus the recovery id (0...3).
@@ -72,11 +74,12 @@ extension Context {
             throw Secp256k1Error.wrongLength(expected: 64, actual: input64.count)
         }
         guard (0...3).contains(recoveryID) else { throw Secp256k1Error.invalidSignature }
-        var sig = secp256k1_ecdsa_recoverable_signature()
-        let ok = unsafe raw.ecdsaRecoverableSignatureParseCompact(
-            sig: &sig, input64: input64, recid: recoveryID)
+        var sig = CollectionOfOne(ECDSARecoverableSignature())
+        var sigSpan = sig.mutableSpan
+        let ok = raw.ecdsaRecoverableSignatureParseCompact(
+            sig: &sigSpan, input64: input64, recid: recoveryID)
         guard ok == 1 else { throw Secp256k1Error.invalidSignature }
-        return RecoverableSignature(raw: sig)
+        return RecoverableSignature(raw: sig[0])
     }
 
     /// Discards the recovery id, giving a plain ECDSA signature.

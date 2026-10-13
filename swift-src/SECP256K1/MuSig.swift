@@ -90,7 +90,7 @@ extension Context {
     ) throws -> (aggregateKey: XOnlyPublicKey, cache: MuSigKeyAggCache) {
         guard !publicKeys.isEmpty else { throw Secp256k1Error.invalidPublicKey }
         var structs = publicKeys.map(\.raw)
-        var aggPk = secp256k1_xonly_pubkey()
+        var aggPk = XOnlyPubkey()
         var cache = secp256k1_musig_keyagg_cache()
         let ok = structs.withUnsafeMutableBufferPointer { buf -> Int32 in
             let ptrs: [UnsafePointer<Pubkey>?] =

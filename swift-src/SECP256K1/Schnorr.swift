@@ -18,9 +18,9 @@ public struct KeyPair: Sendable {
 /// keys share an x-only key, which is why `xOnlyPublicKey(of:)` also reports
 /// the parity needed to reconstruct the original.
 public struct XOnlyPublicKey: Sendable {
-    @usableFromInline var raw: secp256k1_xonly_pubkey
+    @usableFromInline var raw: XOnlyPubkey
 
-    @usableFromInline init(raw: secp256k1_xonly_pubkey) { self.raw = raw }
+    @usableFromInline init(raw: XOnlyPubkey) { self.raw = raw }
 }
 
 extension Context {
@@ -63,7 +63,7 @@ extension Context {
     /// here it is always requested, since discarding it loses information.
     public func xOnlyPublicKey(of keyPair: KeyPair) throws -> (key: XOnlyPublicKey, parity: Int32) {
         let kp = CollectionOfOne(keyPair.raw)
-        var xonly = CollectionOfOne(secp256k1_xonly_pubkey())
+        var xonly = CollectionOfOne(XOnlyPubkey())
         var xonlySpan = xonly.mutableSpan
         var parity = CollectionOfOne(Int32(0))
         var paritySpan: MutableSpan<Int32>? = parity.mutableSpan
@@ -81,10 +81,11 @@ extension Context {
         guard input32.count == 32 else {
             throw Secp256k1Error.wrongLength(expected: 32, actual: input32.count)
         }
-        var xonly = secp256k1_xonly_pubkey()
-        let ok = unsafe raw.xonlyPubkeyParse(pubkey: &xonly, input32: input32)
+        var xonly = CollectionOfOne(XOnlyPubkey())
+        var xonlySpan = xonly.mutableSpan
+        let ok = raw.xonlyPubkeyParse(pubkey: &xonlySpan, input32: input32)
         guard ok == 1 else { throw Secp256k1Error.invalidPublicKey }
-        return XOnlyPublicKey(raw: xonly)
+        return XOnlyPublicKey(raw: xonly[0])
     }
 
     /// Serialises an x-only public key to its 32-byte x coordinate.
@@ -149,7 +150,7 @@ extension Context {
         publicKey: XOnlyPublicKey
     ) -> Bool {
         guard signature64.count == 64 else { return false }
-        var key = publicKey.raw
-        return unsafe raw.schnorrsigVerify(sig64: signature64, msg: message, pubkey: &key) == 1
+        let key = CollectionOfOne(publicKey.raw)
+        return raw.schnorrsigVerify(sig64: signature64, msg: message, pubkey: key.span) == 1
     }
 }
